@@ -1,0 +1,81 @@
+
+/api/help:
+"Print available functions."
+
+/api/user:
+"↵  User List↵  [post]  :'name': str↵   [get]   : null↵↵    "
+
+/api/user/<user_name>:
+"↵  User↵   [get]   : null↵ [delete]: null↵ "
+
+/api/user/<user_name>/account:
+"↵  Account List↵   [post]  :'name': str, 'btx_id':str, 'api_key':str, 'secret_key':str ↵   [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>:
+"↵  Account info↵   [get]   : null↵ [delete]: null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/asset:
+"↵  Account Asset↵  [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/asset_list:
+"↵  Account Asset List↵ [post]  : 'value': float↵   [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵↵ "
+
+/api/user/<user_name>/account/<account_name>/cost:
+"↵  Account Cost↵   [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/cost_list:
+"↵  Account Slippage List↵  [post]  : 'order_amount':float, 'order_cost':float↵ [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵↵ "
+
+/api/user/<user_name>/account/<account_name>/ir:
+"↵  Account IR↵ [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/ledger:
+"↵  Account Ledger List↵    [post]  : 'usd': float, 'krw':float, 'transaction_type':int↵    [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵↵ "
+
+/api/user/<user_name>/account/<account_name>/mdd:
+"↵  Account MDD↵    [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/order_list:
+"↵  Account Order List↵ [post]  : 'order_id': float, 'symbol':float, 'order_amount':float, 're_order_times':int↵    [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵↵ "
+
+/api/user/<user_name>/account/<account_name>/positions:
+"↵  Account positions↵  [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/return:
+"↵  Account Return↵ [get]   : null↵↵    "
+
+/api/user/<user_name>/account/<account_name>/slippage_list:
+"↵  Account Slippage List↵  [post]  : 'value': float↵   [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵↵ "
+
+/api/user/<user_name>/account/<account_name>/tvr:
+"↵  Account Tvr↵    [get]   : null↵↵    "
+
+/api/user/<user_name>/asset:
+"↵  User Asset↵ [get]   : null↵ "
+
+/api/user/<user_name>/asset_list:
+"↵  User Asset List↵    [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵  "
+
+/api/user/<user_name>/cost:
+"↵  User Cost↵  [get]   : null↵ "
+
+/api/user/<user_name>/cost_list:
+"↵  User Cost List↵ [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵  "
+
+/api/user/<user_name>/ir:
+"↵  User IR↵    [get]   : null↵ "
+
+/api/user/<user_name>/mdd:
+"↵  User MDD↵   [get]   : null↵ "
+
+/api/user/<user_name>/positions:
+"↵  User Position↵  [get]   : null↵ "
+
+/api/user/<user_name>/return:
+"↵  User Return↵    [get]   : null↵ "
+
+/api/user/<user_name>/slippage_list:
+"↵  User Slippage List↵ [get]   : 'start_time': fields.Float(required=False, missing = None), 'end_time': fields.Float(required=False, missing = None), 'limits':fields.Integer(required=False, missing = 60), 'desc':fields.Bool(required=False, missing = True)↵  "
+
+/api/user/<user_name>/tvr:
+"↵  User TVR↵   [get]   : null↵ "
