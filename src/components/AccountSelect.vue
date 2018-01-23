@@ -85,6 +85,7 @@ export default {
           if (self.firstCall && i === 0) {
             self.accountSelected = obj.name
             self.firstCall = false
+            self.$emit('user-changed', self.userSelected)
             self.$emit('account-changed', self.userSelected, self.accountSelected)
           }
         })
@@ -92,7 +93,11 @@ export default {
         console.log(error)
       })
     },
-    userChanged: function () {
+    userChanged: function (event) {
+      // for Dashboard.vue page
+      if (event.target.value.length > 0) {
+        this.$emit('user-changed', event.target.value)
+      }
       this.getAccounts(event.target.value)
     },
     // have to refresh

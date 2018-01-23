@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <account-select hasUser="true" hasAccount="true"/>
+    <account-select hasUser="true" hasAccount="true" v-on:account-changed="fetchAllData"/>
 
     <b-card>
       <b-row>
@@ -21,12 +21,12 @@
            -->
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="costList" name="Cost" value-column="order_cost"></time-value-chart>
     </b-card>
 
     <b-row>
       <b-col lg="12">
-        <asset-table fixed small bordered ok="true" caption="<i class='fa'></i> Cost List"></asset-table>
+        <time-value-table fixed small bordered hasPaging="true" caption="<i class='fa'></i> Cost List" :fields="costFields" :data-list="costList"></time-value-table>
       </b-col><!--/.col-->
     </b-row><!--/.row-->    
 
@@ -49,12 +49,12 @@
            -->
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="slippageList" name="Slippage" value-column="value"></time-value-chart>
     </b-card>
 
     <b-row>
       <b-col lg="12">
-        <asset-table fixed small bordered ok="true" caption="<i class='fa'></i> Slippage List"></asset-table>
+        <time-value-table fixed small bordered hasPaging="true" caption="<i class='fa'></i> Slippage List" :fields="slippageFields" :data-list="slippageList"></time-value-table>
       </b-col><!--/.col-->
     </b-row><!--/.row-->    
 
@@ -64,15 +64,79 @@
 
 <script>
 import AccountSelect from '@/components/AccountSelect'
-import MainChartExample from '@/views/dashboard/MainChartExample'
-import AssetTable from '@/views/records/AssetTable'
+import TimeValueChart from '@/views/dashboard/MainChartExample'
+import TimeValueTable from '@/components/TimeValueTable'
 
 export default {
-  name: 'dashboard',
+  // variables
+  data: function () {
+    return {
+      costList: [],
+      slippageList: [],
+      costFields: [
+        {
+          key: 'timestamp',
+          label: 'Time'
+        },
+        {
+          key: 'order_cost',
+          label: 'Cost'
+        },
+        {
+          key: 'order_amount',
+          label: 'Amount'
+        }
+      ],
+      slippageFields: [
+        {
+          key: 'timestamp',
+          label: 'Time'
+        },
+        {
+          key: 'value',
+          label: 'Slippage'
+        }
+      ]
+    }
+  },
   components: {
     AccountSelect,
-    MainChartExample,
-    AssetTable
+    TimeValueChart,
+    TimeValueTable
+  },
+  methods: {
+    fetchAllData: function (user, account) {
+      this.fetchCost(user, account)
+      this.fetchSlippage(user, account)
+    },
+    fetchCost: function (userName, accountName) {
+      var self = this
+      var tempList = []
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/cost_list' + '?desc=true').then(function (response) {
+        response.data.result.forEach(function (v, i) {
+          var obj = JSON.parse(v)
+          tempList.push(obj)
+        })
+        self.costList = tempList
+      }).catch(function (error) {
+        alert('error')
+        console.log(error)
+      })
+    },
+    fetchSlippage: function (userName, accountName) {
+      var self = this
+      var tempList = []
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/slippage_list' + '?desc=true').then(function (response) {
+        response.data.result.forEach(function (v, i) {
+          var obj = JSON.parse(v)
+          tempList.push(obj)
+        })
+        self.slippageList = tempList
+      }).catch(function (error) {
+        alert('error')
+        console.log(error)
+      })
+    }
   }
 }
 </script>

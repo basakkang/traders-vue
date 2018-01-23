@@ -1,29 +1,28 @@
 <template>
   <b-card :header="caption">
-    <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" class="table-responsive-sm" :items="items" :fields="fields" :current-page="currentPage" :per-page="perPage">
+    <b-table :hover="hover" :striped="striped" :bordered="bordered" :small="small" :fixed="fixed" class="table-responsive-sm" :items="items" :fields="fields" :current-page="currentPage">
       <template slot="status" slot-scope="data">
         <b-badge :variant="getBadge(data.item.status)">{{data.item.status}}</b-badge>
       </template>
     </b-table>
-    <nav v-if="ok">
-      <b-pagination :total-rows="getRowCount(items)" :per-page="perPage" v-model="currentPage" prev-text="Prev" next-text="Next" hide-goto-end-buttons/>
+    <nav v-if="hasPaging">
+      <b-pagination :total-rows="getRowCount(positionData)" :per-page="perPage" v-model="currentPage" prev-text="Prev" next-text="Next" hide-goto-end-buttons/>
     </nav>
   </b-card>
 </template>
 
 <script>
   /**
-   * Randomize array element order in-place.
-   * Using Durstenfeld shuffle algorithm.
+   * coin_name
    */
-  const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1))
-      let temp = array[i]
-      array[i] = array[j]
-      array[j] = temp
-    }
-    return array
+  const objectToList = (positionData) => {
+    var reformattedArray = Object.keys(positionData).map(function (symbol) {
+      var rObj = {}
+      rObj['coin_name'] = symbol.toUpperCase()
+      Object.assign(rObj, positionData[symbol])
+      return rObj
+    })
+    return reformattedArray
   }
 
   export default {
@@ -53,44 +52,53 @@
         type: Boolean,
         default: false
       },
-      ok: {
+      hasPaging: {
         default: false
+      },
+      positionData: {
+        type: Object
       }
     },
     data: () => {
       return {
-        items: shuffleArray([
-          {coin_name: 'Samppa Nori', registered: '2012/01/01', role: 'Member', status: 'Active'},
-          {coin_name: 'Estavan Lykos', registered: '2012/02/01', role: 'Staff', status: 'Banned'},
-          {coin_name: 'Chetan Mohamed', registered: '2012/02/01', role: 'Admin', status: 'Inactive'}
-        ]),
+        items: [],
         fields: [
           {
             key: 'coin_name',
             sortable: true
           },
           {
-            key: 'amount',
+            key: 'base',
+            label: 'Base Price',
             sortable: true
           },
           {
-            key: 'base_price',
+            key: 'ticker',
             sortable: true
           },
           {
-            key: 'ppl',
+            key: 'profit',
             label: 'P/L',
             sortable: true
           },
           {
-            key: 'ppl_percentage',
+            key: 'pnl',
             label: 'P/L %',
+            sortable: true
+          },
+          {
+            key: 'current_value',
+            label: 'Total',
             sortable: true
           }
         ],
         currentPage: 1,
-        perPage: 5,
         totalRows: 0
+      }
+    },
+    watch: {
+      positionData: function (newVal, oldVal) { // watch it
+        this.items = objectToList(newVal)
       }
     },
     methods: {

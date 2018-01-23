@@ -1,10 +1,10 @@
 <script>
 import { Line } from 'vue-chartjs'
+import moment from 'moment'
 
-// const brandPrimary = '#20a8d8'
-const brandSuccess = '#4dbd74'
+// const brandPrimary = '#20a8d8''
 const brandInfo = '#63c2de'
-const brandDanger = '#f86c6b'
+// var timeFormat = 'MM/DD/YYYY HH:mm'
 
 function convertHex (hex, opacity) {
   hex = hex.replace('#', '')
@@ -16,10 +16,6 @@ function convertHex (hex, opacity) {
   return result
 }
 
-function random (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
 export default {
   extends: Line,
   props: {
@@ -27,84 +23,93 @@ export default {
     },
     dataList: {
       type: Array
+    },
+    name: {
+      type: String
+    },
+    valueColumn: {
+      type: String,
+      required: true
     }
   },
-  mounted () {
-    // test
-    console.log(this.dataList)
-    var elements = 0
-    var data1 = []
-    var data2 = []
-    var data3 = []
-
-    for (var i = 0; i <= elements; i++) {
-      data1.push(random(50, 200))
-      data2.push(random(80, 100))
-      data3.push(65)
+  watch: {
+    dataList: function (newVal, oldVal) { // watch it
+      this.makeChart(this.dataList)
     }
+  },
+  methods: {
+    makeChart: function (dataList) {
+      var self = this
+      var data1 = []
+      // var data2 = []
+      // var data3 = []
+      dataList.forEach(function (v, i) {
+        data1.push({t: moment(v.timestamp * 1000), y: v[self.valueColumn]})
+      })
 
-    // rendering chart params (data, options)
-    this.renderChart({
-      labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: convertHex(brandInfo, 10),
-          borderColor: brandInfo,
-          pointHoverBackgroundColor: '#fff',
-          borderWidth: 2,
-          data: data1
-        },
-        {
-          label: 'My Second dataset',
-          backgroundColor: 'transparent',
-          borderColor: brandSuccess,
-          pointHoverBackgroundColor: '#fff',
-          borderWidth: 2,
-          data: data2
-        },
-        {
-          label: 'My Third dataset',
-          backgroundColor: 'transparent',
-          borderColor: brandDanger,
-          pointHoverBackgroundColor: '#fff',
-          borderWidth: 1,
-          borderDash: [8, 5],
-          data: data3
-        }
-      ]
-    }, {
-      maintainAspectRatio: false,
-      legend: {
-        display: true
-      },
-      scales: {
-        xAxes: [{
-          gridLines: {
-            drawOnChartArea: false
+      // for (var i = 0; i <= elements; i++) {
+      //   data1.push(random(50, 200))
+      //   data2.push(random(80, 100))
+      //   data3.push(65)
+      // }
+
+      // rendering chart params (data, options)
+      this.renderChart({
+        datasets: [
+          {
+            label: this.name,
+            backgroundColor: convertHex(brandInfo, 10),
+            borderColor: brandInfo,
+            pointHoverBackgroundColor: '#fff',
+            borderWidth: 2,
+            data: data1
           }
-        }],
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            maxTicksLimit: 5,
-            stepSize: Math.ceil(250 / 5),
-            max: 250
+        ]
+      }, {
+        maintainAspectRatio: false,
+        legend: {
+          display: true
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'hour',
+              round: 'second',
+              tooltipFormat: 'MMM DD h:mm:ss',
+              displayFormats: {
+                hour: 'MMM D, h:mm A'
+              }
+            },
+            gridLines: {
+              drawOnChartArea: false
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              maxTicksLimit: 10
+              // stepSize: Math.ceil(1000 / 5),
+              // max: 1000
+            },
+            gridLines: {
+              display: true
+            }
+          }]
+        },
+        elements: {
+          point: {
+            radius: 0,
+            hitRadius: 10,
+            hoverRadius: 4,
+            hoverBorderWidth: 1
           },
-          gridLines: {
-            display: true
+          line: {
+            tension: 0
           }
-        }]
-      },
-      elements: {
-        point: {
-          radius: 0,
-          hitRadius: 10,
-          hoverRadius: 4,
-          hoverBorderWidth: 1
         }
-      }
-    })
+      })
+    }
   }
 }
 </script>

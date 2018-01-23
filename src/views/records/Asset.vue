@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <account-select hasUser="true" hasAccount="true"/>
+    <account-select hasUser="true" hasAccount="true" v-on:account-changed="fetchAllData"/>
     
     <b-card>
       <b-row>
@@ -12,12 +12,12 @@
         <b-col sm="7" class="d-none d-md-block">
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="assetList" name="Asset" value-column="value"></time-value-chart>
     </b-card>
 
     <b-row>
       <b-col lg="12">
-        <asset-table fixed small bordered ok="true" caption="<i class='fa'></i> Asset List"></asset-table>
+        <time-value-table fixed small bordered hasPaging="true" caption="<i class='fa'></i> Asset List" :fields="fields" :data-list="assetList"></time-value-table>
       </b-col><!--/.col-->
     </b-row><!--/.row-->
 
@@ -26,15 +26,49 @@
 
 <script>
 import AccountSelect from '@/components/AccountSelect'
-import MainChartExample from '@/views/dashboard/MainChartExample'
-import AssetTable from '@/views/records/AssetTable'
+import TimeValueChart from '@/views/dashboard/MainChartExample'
+import TimeValueTable from '@/components/TimeValueTable'
 
 export default {
-  name: 'dashboard',
+  // variables
+  data: function () {
+    return {
+      assetList: [],
+      fields: [
+        {
+          key: 'timestamp',
+          label: 'Time'
+        },
+        {
+          key: 'value',
+          label: 'Asset'
+        }
+      ]
+    }
+  },
   components: {
     AccountSelect,
-    MainChartExample,
-    AssetTable
+    TimeValueChart,
+    TimeValueTable
+  },
+  methods: {
+    fetchAllData: function (user, account) {
+      this.fetchAsset(user, account)
+    },
+    fetchAsset: function (userName, accountName) {
+      var self = this
+      var tempList = []
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/asset_list' + '?desc=true').then(function (response) {
+        response.data.result.forEach(function (v, i) {
+          var obj = JSON.parse(v)
+          tempList.push(obj)
+        })
+        self.assetList = tempList
+      }).catch(function (error) {
+        alert('error')
+        console.log(error)
+      })
+    }
   }
 }
 </script>

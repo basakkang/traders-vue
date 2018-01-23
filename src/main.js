@@ -7,7 +7,9 @@ import App from './App'
 import router from './router'
 
 // Base URL
-Vue.prototype.$baseURL = 'http://104.238.149.57:9090'
+Vue.prototype.$baseURL = 'http://45.76.110.84:9090'
+// Vue.prototype.$baseURL = 'http://45.32.24.213:9090'
+// Vue.prototype.$baseURL = 'http://104.238.149.57:9090'
 
 Vue.prototype.$http = axios
 Vue.use(BootstrapVue)

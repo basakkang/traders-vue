@@ -22,6 +22,7 @@ const timestampToString = (array) => {
 }
 
 export default {
+  name: 'table',
   props: {
     caption: {
       type: String,
@@ -52,43 +53,13 @@ export default {
     },
     dataList: {
       type: Array
+    },
+    fields: {
+      type: Array
     }
   },
   data: () => {
     return {
-      fields: [
-        {
-          key: 'id',
-          sortable: true
-        },
-        {
-          key: 'accounts_id',
-          sortable: true
-        },
-        {
-          key: 'order_amount',
-          label: 'Amount',
-          sortable: true
-        },
-        {
-          key: 'price',
-          sortable: true
-        },
-        {
-          key: 'timestamp',
-          sortable: true
-        },
-        {
-          key: 'symbol',
-          sortable: true
-        },
-        {
-          key: 're_order_times',
-          label: 'Reorder Times',
-          sortable: true
-        }
-
-      ],
       currentPage: 1,
       perPage: 10,
       totalRows: 0

@@ -12,6 +12,7 @@ import Overall from '@/views/records/Overall'
 import Asset from '@/views/records/Asset'
 import CostSlippage from '@/views/records/CostSlippage'
 import Order from '@/views/records/Order'
+import Candle from '@/views/records/Candle'
 
 // Views - Backtest
 import Backtest from '@/views/backtest/Backtest'
@@ -67,6 +68,12 @@ export default new Router({
               path: 'order',
               name: 'Order',
               component: Order
+            },
+            {
+              path: 'candle',
+              name: 'Candle',
+              component: Candle
+
             }
           ]
         },

@@ -12,7 +12,7 @@
         <b-col sm="7" class="d-none d-md-block">
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="assetList"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="assetList" name="Asset" value-column="value"></time-value-chart>
     </b-card>
 
     <b-card>
@@ -25,7 +25,7 @@
         <b-col sm="7" class="d-none d-md-block">
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="costList" name="Cost" value-column="order_cost"></time-value-chart>
     </b-card>
 
     <b-card>
@@ -38,19 +38,14 @@
         <b-col sm="7" class="d-none d-md-block">
         </b-col>
       </b-row>
-      <main-chart-example class="chart-wrapper" style="height:300px;margin-top:40px;" height="300"></main-chart-example>
+      <time-value-chart class="chart-wrapper" style="height:300px;margin-top:40px;" height="300" :data-list="slippageList" name="Slippage" value-column="value"></time-value-chart>
     </b-card>
-
-    <!-- test -->
-    <b-row>
-      {{ assetList }}
-    </b-row>
   </div>
 </template>
 
 <script>
 import AccountSelect from '@/components/AccountSelect'
-import MainChartExample from '@/views/dashboard/MainChartExample'
+import TimeValueChart from '@/views/dashboard/MainChartExample'
 import IndexCards from '@/views/dashboard/IndexCards'
 // // Do not forget this little guy
 // name: 'RangeSlider',
@@ -84,16 +79,15 @@ import IndexCards from '@/views/dashboard/IndexCards'
 //   mdd: null
 // }
 export default {
-  name: 'dashboard',
   // variables
   data: function () {
     return {
-      asset: 100,
-      ir: 200,
-      ret: 300,
-      tvr: 400,
-      cost: 500,
-      mdd: 600,
+      asset: 0,
+      ir: 0,
+      ret: 0,
+      tvr: 0,
+      cost: 0,
+      mdd: 0,
       assetList: [],
       costList: [],
       slippageList: []
@@ -101,13 +95,15 @@ export default {
   },
   components: {
     AccountSelect,
-    MainChartExample,
+    TimeValueChart,
     IndexCards
   },
   methods: {
     fetchAllData: function (user, account) {
       this.fetchIndexCards(user, account)
       this.fetchAssetChart(user, account)
+      this.fetchCostChart(user, account)
+      this.fetchSlippageChart(user, account)
     },
     fetchIndexCards: function (userName, accountName) {
       // asset
@@ -157,13 +153,40 @@ export default {
     fetchAssetChart: function (userName, accountName) {
       var self = this
       var tempList = []
-      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/asset_list').then(function (response) {
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/asset_list' + '?desc=true').then(function (response) {
         response.data.result.forEach(function (v, i) {
           var obj = JSON.parse(v)
           tempList.push(obj)
         })
         self.assetList = tempList
-        // alert(JSON.stringify(self.assetList))
+      }).catch(function (error) {
+        alert('error')
+        console.log(error)
+      })
+    },
+    fetchCostChart: function (userName, accountName) {
+      var self = this
+      var tempList = []
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/cost_list' + '?desc=true').then(function (response) {
+        response.data.result.forEach(function (v, i) {
+          var obj = JSON.parse(v)
+          tempList.push(obj)
+        })
+        self.costList = tempList
+      }).catch(function (error) {
+        alert('error')
+        console.log(error)
+      })
+    },
+    fetchSlippageChart: function (userName, accountName) {
+      var self = this
+      var tempList = []
+      this.$http.get(this.$baseURL + '/api/user/' + userName + '/account/' + accountName + '/slippage_list' + '?desc=true').then(function (response) {
+        response.data.result.forEach(function (v, i) {
+          var obj = JSON.parse(v)
+          tempList.push(obj)
+        })
+        self.slippageList = tempList
       }).catch(function (error) {
         alert('error')
         console.log(error)
