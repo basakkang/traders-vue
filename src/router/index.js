@@ -21,7 +21,7 @@ import Backtest from '@/views/backtest/Backtest'
 import Rats from '@/views/backtest/Rats'
 
 // Component Test
-import LineChart from '@/views/dashboard/TutorialChart'
+import EchartsDemo from '@/views/records/EchartsDemo'
 
 Vue.use(Router)
 
@@ -132,7 +132,7 @@ export default new Router({
         },
         {
           path: 'testing',
-          component: LineChart
+          component: EchartsDemo
         }
       ]
     }
